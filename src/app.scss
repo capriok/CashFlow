@@ -1,0 +1,173 @@
+@mixin flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+$light-grey: rgb(240, 240, 240);
+$grey: rgb(210, 210, 210);
+$green: rgb(0, 204, 34);
+$red: rgb(255, 0, 0);
+
+$main-section: rgb(215, 215, 215);
+
+.app {
+  width: 100%;
+  text-align: center;
+}
+
+.app {
+  @include flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 100vw;
+  .header,
+  .sheet-head,
+  .add-to-sheet,
+  .value-sheet,
+  .actions {
+    width: 100%;
+  }
+  .header,
+  .results,
+  .actions {
+    z-index: 100;
+  }
+  .add-to-sheet {
+    z-index: 50;
+  }
+  .value-sheet {
+    z-index: 1;
+  }
+  .neut {
+    color: black;
+  }
+  .blue {
+    color: steelblue;
+  }
+  .pos {
+    color: $green;
+  }
+  .neg {
+    color: $red;
+  }
+
+  .header {
+    overflow: hidden;
+    position: relative;
+    .banner {
+      @include flex;
+      align-items: flex-end;
+      height: 175px;
+      img {
+        width: 100%;
+        min-height: 245px;
+      }
+    }
+    .cc {
+      position: absolute;
+      left: 15px;
+      bottom: 10px;
+      width: 55%;
+    }
+  }
+  .sheet-head {
+    @include flex;
+    position: sticky;
+    top: 0;
+    justify-content: space-between;
+    height: 40px;
+    padding: 0px 15px;
+    border-top: 2px solid steelblue;
+    border-bottom: 2px solid steelblue;
+    box-shadow: 0px 0px 10px -2px black;
+    background-color: $light-grey;
+    p {
+      font-weight: bold;
+    }
+  }
+  .add-to-sheet {
+    @include flex;
+    height: 40px;
+    border-top: 1px solid steelblue;
+    border-bottom: 1px solid steelblue;
+    background-color: $light-grey;
+    .inputs {
+      flex: 1;
+      padding: 0 15px;
+      @include flex;
+      justify-content: space-between;
+      input {
+        font-size: 0.9rem;
+        outline: none;
+        border: none;
+        text-align: left;
+        background-color: transparent;
+      }
+      input::placeholder {
+        font-size: 0.8rem;
+      }
+      input:nth-child(2) {
+        text-align: right;
+      }
+    }
+  }
+  .value-sheet {
+    flex: 1;
+    margin-bottom: 40px;
+    #incomes,
+    #expenses {
+      .section-head {
+        @include flex;
+        justify-content: space-between;
+        padding: 5px 15px;
+        margin-top: 10px;
+        .section-title {
+          text-align: left;
+          font-size: 1.1rem;
+          font-weight: bold;
+        }
+      }
+      .item:not(:nth-childe(2)) {
+        margin-top: 3px;
+      }
+      .item {
+        @include flex;
+        justify-content: space-between;
+        height: 40px;
+        padding: 0 15px;
+        border-top: 1px solid $grey;
+        border-bottom: 1px solid $grey;
+        background-color: $light-grey;
+        .item-name {
+          text-transform: capitalize;
+        }
+      }
+    }
+  }
+  .actions {
+    position: fixed;
+    bottom: 0;
+    @include flex;
+    justify-content: space-evenly;
+    height: 40px;
+    border-top: 2px solid steelblue;
+    background-color: $light-grey;
+    box-shadow: 0px 0px 10px -2px black;
+    .divider {
+      width: 1px;
+      height: 100%;
+      background-color: steelblue;
+    }
+    button {
+      all: unset;
+      @include flex;
+      width: 50%;
+      height: 100%;
+      font-weight: bold;
+      &:active {
+        transform: scale(0.97);
+      }
+    }
+  }
+}
