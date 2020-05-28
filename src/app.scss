@@ -148,6 +148,12 @@ $main-section: rgb(215, 215, 215);
     p {
       font-weight: bold;
     }
+    .ham {
+      @include flex;
+      justify-content: flex-end;
+      width: 30px;
+      height: 100%;
+    }
   }
   .add-to-sheet {
     @include flex;
@@ -246,6 +252,7 @@ $main-section: rgb(215, 215, 215);
     background-color: rgb(100, 100, 100);
   }
   .notice {
+    display: block;
     user-select: none;
     color: white;
     text-align: center;
@@ -255,6 +262,7 @@ $main-section: rgb(215, 215, 215);
     border-bottom: 2px solid steelblue;
   }
   .app {
+    overflow: hidden;
     max-width: $size;
     min-height: 60vh;
     max-height: 60vh;
@@ -278,7 +286,7 @@ $main-section: rgb(215, 215, 215);
       width: 90%;
     }
   }
-  .header {
+  .app-header {
     user-select: none;
     .logout {
       cursor: pointer !important;
@@ -292,13 +300,13 @@ $main-section: rgb(215, 215, 215);
     }
   }
   .data-sheet {
+    flex: 1;
     overflow: scroll;
     margin-bottom: 0px !important;
     background-color: $light-grey;
     .section-head {
       margin-top: 0px !important;
       padding-top: 10px !important;
-      background-color: $main-section;
     }
     .item {
       .delete-checkbox {
