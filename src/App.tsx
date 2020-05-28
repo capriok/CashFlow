@@ -3,13 +3,14 @@ import React, { useState, useEffect } from 'react'
 import short from 'short-uuid'
 
 import GreetBox from './components/greet-box'
-import Header from './components/header'
+import AppHeader from './components/app-header'
 import SheetHead from './components/sheet-head'
 import DataSheet from './components/data-sheet'
 import ActionBox from './components/action-box'
 
 import {
   User,
+  BudgetItem,
   SheetItem,
   IsComposing,
   NewItem,
@@ -19,6 +20,7 @@ import {
 import { FormEvent } from './types/types'
 
 export const App: React.FC = () => {
+  const [budgets, setBudgets] = useState<BudgetItem[]>([])
   const [incomes, setIncomes] = useState<SheetItem[]>([])
   const [expenses, setExpenses] = useState<SheetItem[]>([])
   const [isDeleting, setDeleting] = useState<boolean>(false)
@@ -44,10 +46,12 @@ export const App: React.FC = () => {
   const isUser = localStorage.getItem(`CF-user`)
   const hasIncomes = localStorage.getItem(`CF-incomes$${user.name}`)
   const hasExpenses = localStorage.getItem(`CF-expenses$${user.name}`)
+  const hasBudgets = localStorage.getItem(`CF-budgets$${user.name}`)
   useEffect(() => {
     isUser && setUser(JSON.parse(isUser))
     hasIncomes && setIncomes(JSON.parse(hasIncomes))
     hasExpenses && setExpenses(JSON.parse(hasExpenses))
+    hasBudgets && setBudgets(JSON.parse(hasBudgets))
   }, [user.isAuth])
   useEffect(() => {
     if (user.isAuth) {
@@ -55,6 +59,11 @@ export const App: React.FC = () => {
       localStorage.setItem(`CF-expenses$${user.name}`, JSON.stringify(expenses))
     }
   }, [incomes, expenses])
+  useEffect(() => {
+    if (user.isAuth) {
+      localStorage.setItem(`CF-budgets$${user.name}`, JSON.stringify(budgets))
+    }
+  }, [budgets])
 
   const composeType = (type: string): void => {
     if (type === 'income') {
@@ -155,7 +164,10 @@ export const App: React.FC = () => {
         {!user.isAuth
           ? <GreetBox user={user} setUser={setUser} />
           : <>
-            <Header user={user} />
+            <AppHeader
+              user={user}
+              budgets={budgets}
+              setBudgets={setBudgets} />
             <SheetHead
               incomes={incomes}
               expenses={expenses}

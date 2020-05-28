@@ -1,7 +1,10 @@
-import React from 'react'
-
 export interface User {
   isAuth: boolean,
+  name: string
+}
+
+export interface BudgetItem {
+  isActive: boolean,
   name: string
 }
 
