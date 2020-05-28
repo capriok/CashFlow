@@ -1,18 +1,26 @@
 import React from 'react'
-import { Calculations } from '../interfaces/interfaces'
+import { Calculations, SheetItem } from '../interfaces/interfaces'
 
 interface Props {
-  results: Calculations
+  incomes: SheetItem[],
+  expenses: SheetItem[],
+  results: Calculations,
+  toggleDeletion: () => void
 }
 
-const SheetHead: React.FC<Props> = ({ results }) => {
+const SheetHead: React.FC<Props> = ({ incomes, expenses, results, toggleDeletion }) => {
   const calculateBalence = (): string => {
-    const bal = results.balence
-    return bal === 0 ? 'neut' : bal > 0 ? 'pos' : 'neg'
+    return results.balence === 0
+      ? 'neut'
+      : results.balence > 0
+        ? 'pos'
+        : 'neg'
   }
   return (
     <header className="sheet-head">
       <p>Balence: $ <span className={calculateBalence()}>{results.balence.toFixed(2)}</span></p>
+      {(incomes.length > 0 || expenses.length > 0) &&
+        <p onClick={() => toggleDeletion()}>☰</p>}
     </header>
   )
 }

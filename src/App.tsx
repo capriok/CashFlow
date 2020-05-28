@@ -1,34 +1,60 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
+import short from 'short-uuid'
+
+import GreetBox from './components/greet-box'
 import Header from './components/header'
 import SheetHead from './components/sheet-head'
 import DataSheet from './components/data-sheet'
 import ActionBox from './components/action-box'
 
-import headBanner from './images/head-banner.jpg'
-import headCC from './images/head-cc.png'
-
-import { SheetItem, IsComposing, NewItem, Calculations } from './interfaces/interfaces'
+import {
+  User,
+  SheetItem,
+  IsComposing,
+  NewItem,
+  Calculations,
+  Selection
+} from './interfaces/interfaces'
 import { FormEvent } from './types/types'
 
 export const App: React.FC = () => {
-  const [isComposing, setCompose] = React.useState<IsComposing>({
+  const [user, setUser] = useState<User>({
+    isAuth: false, name: ''
+  })
+  const [isComposing, setCompose] = useState<IsComposing>({
     income: false, expense: false
   })
-  const [newItem, setNewItem] = React.useState<NewItem>({
+  const [isDeleting, setDeleting] = useState<boolean>(false)
+  const [selection, setSelection] = useState<Selection>({
+    incomes: [],
+    expenses: []
+  })
+  const [newItem, setNewItem] = useState<NewItem>({
     name: '', value: undefined
   })
-  const [incomes, setIncomes] = React.useState<SheetItem[]>([
-    { id: 1, name: 'paycheck', value: 1400 }
-  ])
-  const [expenses, setExpenses] = React.useState<SheetItem[]>([
-    { id: 1, name: 'rent', value: 600 },
-  ])
-  const [results, setResults] = React.useState<Calculations>({
+  const [incomes, setIncomes] = useState<SheetItem[]>([])
+  const [expenses, setExpenses] = useState<SheetItem[]>([])
+  const [results, setResults] = useState<Calculations>({
     balence: 0,
     income: 0,
     expense: 0
   })
+
+  const isUser = localStorage.getItem(`CF-user`)
+  const hasIncomes = localStorage.getItem(`CF-incomes$${user.name}`)
+  const hasExpenses = localStorage.getItem(`CF-expenses$${user.name}`)
+  useEffect(() => {
+    isUser && setUser(JSON.parse(isUser))
+    hasIncomes && setIncomes(JSON.parse(hasIncomes))
+    hasExpenses && setExpenses(JSON.parse(hasExpenses))
+  }, [user.isAuth])
+  useEffect(() => {
+    if (user.isAuth) {
+      localStorage.setItem(`CF-incomes$${user.name}`, JSON.stringify(incomes))
+      localStorage.setItem(`CF-expenses$${user.name}`, JSON.stringify(expenses))
+    }
+  }, [incomes, expenses])
 
   const composeType = (type: string): void => {
     if (type === 'income') {
@@ -41,7 +67,7 @@ export const App: React.FC = () => {
   const addType = (e: FormEvent): void => {
     e.preventDefault()
     let type: string = e.target.name
-    let id = Math.ceil(Math.random() * 10000);
+    let id = short.generate();
     let { name } = newItem
     let { value } = newItem
     if (!name || !value) return
@@ -61,8 +87,55 @@ export const App: React.FC = () => {
       default:
         break;
     }
-    setNewItem({ name: '', value: 0 })
+    closeCompose()
+  }
+
+  const closeCompose = (): void => {
     setCompose({ income: false, expense: false })
+    setNewItem({ name: '', value: 0 })
+  }
+
+  const toggleDeletion = (): void => {
+    setDeleting(!isDeleting)
+    setSelection({
+      incomes: [],
+      expenses: []
+    })
+  }
+
+
+  const handleCheckbox = (type: string, item: SheetItem, i: number): void => {
+    if (type === 'income') {
+      setSelection({
+        ...selection,
+        incomes: [...selection.incomes, item]
+      })
+    } else if (type === 'expense') {
+      setSelection({
+        ...selection,
+        expenses: [...selection.expenses, item]
+      })
+    }
+  }
+
+  const deleteSelection = (): void => {
+    const incomeFilter = incomes.filter(({ id: id1 }) => {
+      console.log(id1);
+      return !selection.incomes.some(({ id: id2 }) => {
+        console.log(id2 === id1);
+        return id2 === id1
+      })
+    })
+    const expenseFilter = expenses.filter(({ id: id1 }) => {
+      console.log(id1);
+      return !selection.expenses.some(({ id: id2 }) => {
+        console.log(id2 === id1);
+        return id2 === id1
+      })
+    })
+    setIncomes(incomeFilter)
+    setExpenses(expenseFilter)
+    toggleDeletion()
   }
 
   const calculateResults = (): void => {
@@ -72,33 +145,49 @@ export const App: React.FC = () => {
       balence: inVals - exVals,
       income: inVals,
       expense: exVals
-
     })
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     calculateResults()
   }, [incomes, expenses])
 
   return (
     <div className="app">
-      <Header banner={headBanner} card={headCC} />
-      <SheetHead results={results} />
-      <DataSheet
-        incomes={incomes}
-        expenses={expenses}
-        results={results}
-        newItem={newItem}
-        setNewItem={setNewItem}
-        isComposing={isComposing}
-        setCompose={setCompose}
-        addType={addType}
-      />
-      <ActionBox
-        composeType={composeType}
-        isComposing={isComposing}
-        setCompose={setCompose}
-      />
+      {user.isAuth
+        ? <>
+          <Header user={user} />
+          <SheetHead
+            incomes={incomes}
+            expenses={expenses}
+            results={results}
+            toggleDeletion={toggleDeletion}
+          />
+          <DataSheet
+            incomes={incomes}
+            expenses={expenses}
+            results={results}
+            newItem={newItem}
+            setNewItem={setNewItem}
+            isComposing={isComposing}
+            setCompose={setCompose}
+            isDeleting={isDeleting}
+            handleCheckbox={handleCheckbox}
+            addType={addType}
+          />
+          <ActionBox
+            composeType={composeType}
+            isComposing={isComposing}
+            closeCompose={closeCompose}
+            isDeleting={isDeleting}
+            toggleDeletion={toggleDeletion}
+            deleteSelection={deleteSelection}
+          />
+        </>
+        : <GreetBox user={user} setUser={setUser} />
+      }
+
+
     </div>
   )
 }

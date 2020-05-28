@@ -1,7 +1,12 @@
 import React from 'react'
 
+export interface User {
+  isAuth: boolean,
+  name: string
+}
+
 export interface SheetItem {
-  id: number,
+  id: string,
   name: string,
   value: number
 }
@@ -20,4 +25,9 @@ export interface IsComposing {
 export interface NewItem {
   name: string,
   value: number | undefined
+}
+
+export interface Selection {
+  incomes: SheetItem[],
+  expenses: SheetItem[]
 }

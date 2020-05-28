@@ -52,6 +52,52 @@ $main-section: rgb(215, 215, 215);
     color: $red;
   }
 
+  .greetbox {
+    position: relative;
+    @include flex;
+    flex-direction: column;
+    height: 100vh;
+    .greet-logo {
+      z-index: -1;
+      position: fixed;
+      min-height: 100%;
+      opacity: 0.6;
+    }
+    .inner-box {
+      width: 90vw;
+      padding: 25px 0;
+      border-radius: 10px;
+      border: 2px solid steelblue;
+      background-color: rgba(255, 255, 255, 0.7);
+      h1 {
+        padding-bottom: 25px;
+        font-size: 2rem;
+      }
+      input {
+        border: none;
+        outline: none;
+        padding: 2px 5px;
+        border-bottom: 2px solid steelblue;
+        background-color: transparent;
+      }
+      button {
+        border: none;
+        outline: none;
+        font-size: 0.9rem;
+        padding: 2px 15px;
+        margin-top: 20px;
+        border-radius: 5px;
+        border: 2px solid steelblue;
+        background-color: $light-grey;
+        transition: 0.05s;
+        &:active {
+          transition: 0.05s;
+          transform: scale(0.98);
+        }
+      }
+    }
+  }
+
   .header {
     overflow: hidden;
     position: relative;
@@ -69,6 +115,22 @@ $main-section: rgb(215, 215, 215);
       left: 15px;
       bottom: 10px;
       width: 55%;
+    }
+    .username {
+      position: absolute;
+      font-size: 0.8rem;
+      left: 35px;
+      bottom: 25px;
+      color: white;
+      text-transform: capitalize;
+    }
+    .logout {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 20px;
+      filter: invert(1);
+      transform: rotate(180deg);
     }
   }
   .sheet-head {
@@ -128,7 +190,7 @@ $main-section: rgb(215, 215, 215);
           font-weight: bold;
         }
       }
-      .item:not(:nth-childe(2)) {
+      .item:not(:nth-child(2)) {
         margin-top: 3px;
       }
       .item {
@@ -141,6 +203,12 @@ $main-section: rgb(215, 215, 215);
         background-color: $light-grey;
         .item-name {
           text-transform: capitalize;
+        }
+        .delete-checkbox {
+          @include flex;
+          justify-content: flex-end;
+          height: 100%;
+          width: 30px;
         }
       }
     }

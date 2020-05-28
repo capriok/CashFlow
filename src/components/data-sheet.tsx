@@ -11,10 +11,21 @@ interface Props {
   setCompose: SetComposing;
   newItem: NewItem,
   setNewItem: SetNewItem,
+  isDeleting: boolean,
+  handleCheckbox: (type: string, item: SheetItem, i: number) => void,
   addType: (e: FormEvent) => void
 }
 
-const ValueSheet: React.FC<Props> = ({ incomes, expenses, results, newItem, setNewItem, isComposing, addType }) => {
+const ValueSheet: React.FC<Props> = ({
+  incomes,
+  expenses,
+  results,
+  newItem,
+  setNewItem,
+  isComposing,
+  isDeleting,
+  handleCheckbox,
+  addType }) => {
   return (
     <div className="value-sheet" onTouchStart={() => { }}>
       <section id="incomes">
@@ -38,7 +49,12 @@ const ValueSheet: React.FC<Props> = ({ incomes, expenses, results, newItem, setN
         {incomes.map((item, i) => (
           <div className="item" key={i}>
             <p className="item-name">{item.name}</p>
-            <p><span>$ </span><span className="pos">{item.value.toFixed(2)}</span></p>
+            {isDeleting
+              ? <label className="delete-checkbox">
+                <input type="checkbox" onClick={() => handleCheckbox('income', item, i)} />
+              </label>
+              : <p><span>$ </span><span className="pos">{item.value.toFixed(2)}</span></p>
+            }
           </div>
         ))}
       </section>
@@ -63,7 +79,12 @@ const ValueSheet: React.FC<Props> = ({ incomes, expenses, results, newItem, setN
         {expenses.map((item, i) => (
           <div className="item" key={i}>
             <p className="item-name">{item.name}</p>
-            <p><span>$ </span><span className="neg">{item.value.toFixed(2)}</span></p>
+            {isDeleting
+              ? <label className="delete-checkbox">
+                <input type="checkbox" onClick={() => handleCheckbox('expense', item, i)} />
+              </label>
+              : <p><span>$ </span><span className="neg">{item.value.toFixed(2)}</span></p>
+            }
           </div>
         ))}
       </section>
