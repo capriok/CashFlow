@@ -23,22 +23,22 @@ $main-section: rgb(215, 215, 215);
   justify-content: flex-start;
   flex-direction: column;
   width: 100vw;
-  .header,
+  .app-header,
   .sheet-head,
   .add-to-sheet,
-  .value-sheet,
-  .actions {
+  .data-sheet,
+  .action-box {
     width: 100%;
   }
-  .header,
+  .app-header,
   .results,
-  .actions {
+  .action-box {
     z-index: 100;
   }
   .add-to-sheet {
     z-index: 50;
   }
-  .value-sheet {
+  .data-sheet {
     z-index: 1;
   }
   .neut {
@@ -53,7 +53,6 @@ $main-section: rgb(215, 215, 215);
   .neg {
     color: $red;
   }
-
   .greetbox {
     position: relative;
     @include flex;
@@ -99,8 +98,7 @@ $main-section: rgb(215, 215, 215);
       }
     }
   }
-
-  .header {
+  .app-header {
     overflow: hidden;
     position: relative;
     .banner {
@@ -177,7 +175,7 @@ $main-section: rgb(215, 215, 215);
       }
     }
   }
-  .value-sheet {
+  .data-sheet {
     margin-bottom: 43px;
     #incomes,
     #expenses {
@@ -215,7 +213,7 @@ $main-section: rgb(215, 215, 215);
       }
     }
   }
-  .actions {
+  .action-box {
     position: fixed;
     bottom: 0;
     @include flex;
@@ -257,14 +255,18 @@ $main-section: rgb(215, 215, 215);
     border-bottom: 2px solid steelblue;
   }
   .app {
-    position: relative;
     max-width: $size;
     min-height: 60vh;
     max-height: 60vh;
     margin: 0 auto;
     border-radius: 10px;
-    overflow: hidden;
     border: 3px solid black;
+  }
+  .app-header {
+    min-height: 200px;
+    .banner {
+      height: 200px !important;
+    }
   }
   .greetbox {
     .greet-logo {
@@ -283,14 +285,15 @@ $main-section: rgb(215, 215, 215);
     }
   }
   .sheet-head {
+    min-height: 40px !important;
     .ham {
       user-select: none;
       cursor: pointer;
     }
   }
-  .value-sheet {
+  .data-sheet {
+    overflow: scroll;
     margin-bottom: 0px !important;
-    flex: 1;
     background-color: $light-grey;
     .section-head {
       margin-top: 0px !important;
@@ -306,9 +309,8 @@ $main-section: rgb(215, 215, 215);
       }
     }
   }
-  .actions {
+  .action-box {
     position: unset !important;
-    // bottom: unset !important;
     max-width: $size;
     button {
       user-select: none;

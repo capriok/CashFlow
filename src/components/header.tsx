@@ -12,7 +12,7 @@ interface Props {
 
 const Header: React.FC<Props> = ({ user }) => {
   return (
-    <header className="header">
+    <header className="app-header">
       <div className="banner">
         <img src={banner} alt="" />
       </div>

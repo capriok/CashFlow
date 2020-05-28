@@ -27,11 +27,11 @@ const ValueSheet: React.FC<Props> = ({
   handleCheckbox,
   addType }) => {
   return (
-    <div className="value-sheet" onTouchStart={() => { }}>
+    <div className="data-sheet" onTouchStart={() => { }}>
       <section id="incomes">
         {(incomes.length > 0 || isComposing.income)
           && <div className="section-head">
-            <p className="section-title">Cash Flow</p>
+            <p className="section-title">Incomes</p>
             <p><span>$ </span><span className="">{results.income.toFixed(2)}</span></p>
           </div>
         }

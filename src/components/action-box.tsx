@@ -20,7 +20,7 @@ const ActionBox: React.FC<Props> = ({
   toggleDeletion,
   deleteSelection }) => {
   return (
-    <div className="actions">
+    <div className="action-box">
       {isDeleting
         ? <>
           <button onClick={() => deleteSelection()}>Delete Selection</button>
