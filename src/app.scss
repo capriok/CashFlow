@@ -134,6 +134,7 @@ $main-section: rgb(215, 215, 215);
     }
   }
   .sheet-head {
+    z-index: 10;
     @include flex;
     position: sticky;
     top: 0;
@@ -175,8 +176,7 @@ $main-section: rgb(215, 215, 215);
     }
   }
   .value-sheet {
-    flex: 1;
-    margin-bottom: 40px;
+    margin-bottom: 43px;
     #incomes,
     #expenses {
       .section-head {
@@ -237,5 +237,32 @@ $main-section: rgb(215, 215, 215);
         transform: scale(0.97);
       }
     }
+  }
+}
+
+@media (min-width: 500px) {
+  body {
+    background-color: rgb(85, 85, 85);
+  }
+  .app {
+    justify-content: center;
+    width: 30vw;
+    margin: 0 auto;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 3px solid black;
+  }
+  .value-sheet {
+    margin-bottom: 3px !important;
+    .section-head {
+      margin-top: 0px !important;
+      padding-top: 10px !important;
+      background-color: $main-section;
+    }
+  }
+  .actions {
+    position: unset !important;
+    bottom: unset !important;
+    max-width: 30vw;
   }
 }
