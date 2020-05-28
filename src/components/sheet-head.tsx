@@ -20,7 +20,7 @@ const SheetHead: React.FC<Props> = ({ incomes, expenses, results, toggleDeletion
     <header className="sheet-head">
       <p>Balence: $ <span className={calculateBalence()}>{results.balence.toFixed(2)}</span></p>
       {(incomes.length > 0 || expenses.length > 0) &&
-        <p onClick={() => toggleDeletion()}>☰</p>}
+        <p className="ham" onClick={() => toggleDeletion()}>☰</p>}
     </header>
   )
 }

@@ -15,7 +15,9 @@ $main-section: rgb(215, 215, 215);
   width: 100%;
   text-align: center;
 }
-
+.notice {
+  display: none;
+}
 .app {
   @include flex;
   justify-content: flex-start;
@@ -241,28 +243,76 @@ $main-section: rgb(215, 215, 215);
 }
 
 @media (min-width: 500px) {
+  $size: 500px;
   body {
-    background-color: rgb(85, 85, 85);
+    background-color: rgb(100, 100, 100);
+  }
+  .notice {
+    user-select: none;
+    color: white;
+    text-align: center;
+    margin: 20px auto;
+    padding-bottom: 5px;
+    width: $size;
+    border-bottom: 2px solid steelblue;
   }
   .app {
-    justify-content: center;
-    width: 30vw;
+    position: relative;
+    max-width: $size;
+    min-height: 60vh;
+    max-height: 60vh;
     margin: 0 auto;
     border-radius: 10px;
     overflow: hidden;
     border: 3px solid black;
   }
+  .greetbox {
+    .greet-logo {
+      position: absolute !important;
+      min-height: 100%;
+      opacity: 0.6;
+    }
+    .inner-box {
+      width: 90%;
+    }
+  }
+  .header {
+    user-select: none;
+    .logout {
+      cursor: pointer !important;
+    }
+  }
+  .sheet-head {
+    .ham {
+      user-select: none;
+      cursor: pointer;
+    }
+  }
   .value-sheet {
-    margin-bottom: 3px !important;
+    margin-bottom: 0px !important;
+    flex: 1;
+    background-color: $light-grey;
     .section-head {
       margin-top: 0px !important;
       padding-top: 10px !important;
       background-color: $main-section;
     }
+    .item {
+      .delete-checkbox {
+        cursor: pointer !important;
+        input {
+          cursor: pointer !important;
+        }
+      }
+    }
   }
   .actions {
     position: unset !important;
-    bottom: unset !important;
-    max-width: 30vw;
+    // bottom: unset !important;
+    max-width: $size;
+    button {
+      user-select: none;
+      cursor: pointer !important;
+    }
   }
 }

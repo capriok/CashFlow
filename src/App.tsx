@@ -19,26 +19,26 @@ import {
 import { FormEvent } from './types/types'
 
 export const App: React.FC = () => {
+  const [incomes, setIncomes] = useState<SheetItem[]>([])
+  const [expenses, setExpenses] = useState<SheetItem[]>([])
+  const [isDeleting, setDeleting] = useState<boolean>(false)
   const [user, setUser] = useState<User>({
     isAuth: false, name: ''
   })
   const [isComposing, setCompose] = useState<IsComposing>({
     income: false, expense: false
   })
-  const [isDeleting, setDeleting] = useState<boolean>(false)
-  const [selection, setSelection] = useState<Selection>({
-    incomes: [],
-    expenses: []
-  })
   const [newItem, setNewItem] = useState<NewItem>({
     name: '', value: undefined
   })
-  const [incomes, setIncomes] = useState<SheetItem[]>([])
-  const [expenses, setExpenses] = useState<SheetItem[]>([])
   const [results, setResults] = useState<Calculations>({
     balence: 0,
     income: 0,
     expense: 0
+  })
+  const [selection, setSelection] = useState<Selection>({
+    incomes: [],
+    expenses: []
   })
 
   const isUser = localStorage.getItem(`CF-user`)
@@ -120,16 +120,12 @@ export const App: React.FC = () => {
 
   const deleteSelection = (): void => {
     const incomeFilter = incomes.filter(({ id: id1 }) => {
-      console.log(id1);
       return !selection.incomes.some(({ id: id2 }) => {
-        console.log(id2 === id1);
         return id2 === id1
       })
     })
     const expenseFilter = expenses.filter(({ id: id1 }) => {
-      console.log(id1);
       return !selection.expenses.some(({ id: id2 }) => {
-        console.log(id2 === id1);
         return id2 === id1
       })
     })
@@ -153,42 +149,43 @@ export const App: React.FC = () => {
   }, [incomes, expenses])
 
   return (
-    <div className="app">
-      {user.isAuth
-        ? <>
-          <Header user={user} />
-          <SheetHead
-            incomes={incomes}
-            expenses={expenses}
-            results={results}
-            toggleDeletion={toggleDeletion}
-          />
-          <DataSheet
-            incomes={incomes}
-            expenses={expenses}
-            results={results}
-            newItem={newItem}
-            setNewItem={setNewItem}
-            isComposing={isComposing}
-            setCompose={setCompose}
-            isDeleting={isDeleting}
-            handleCheckbox={handleCheckbox}
-            addType={addType}
-          />
-          <ActionBox
-            composeType={composeType}
-            isComposing={isComposing}
-            closeCompose={closeCompose}
-            isDeleting={isDeleting}
-            toggleDeletion={toggleDeletion}
-            deleteSelection={deleteSelection}
-          />
-        </>
-        : <GreetBox user={user} setUser={setUser} />
-      }
-
-
-    </div>
+    <>
+      <h1 className="notice">This is intented to be a mobile only application</h1>
+      <div className="app">
+        {!user.isAuth
+          ? <GreetBox user={user} setUser={setUser} />
+          : <>
+            <Header user={user} />
+            <SheetHead
+              incomes={incomes}
+              expenses={expenses}
+              results={results}
+              toggleDeletion={toggleDeletion}
+            />
+            <DataSheet
+              incomes={incomes}
+              expenses={expenses}
+              results={results}
+              newItem={newItem}
+              setNewItem={setNewItem}
+              isComposing={isComposing}
+              setCompose={setCompose}
+              isDeleting={isDeleting}
+              handleCheckbox={handleCheckbox}
+              addType={addType}
+            />
+            <ActionBox
+              composeType={composeType}
+              isComposing={isComposing}
+              closeCompose={closeCompose}
+              isDeleting={isDeleting}
+              toggleDeletion={toggleDeletion}
+              deleteSelection={deleteSelection}
+            />
+          </>
+        }
+      </div>
+    </>
   )
 }
 
