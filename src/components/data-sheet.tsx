@@ -1,7 +1,17 @@
 import React from 'react'
 
-import { SheetItem, IsComposing, NewItem, Calculations, BudgetData } from '../interfaces/interfaces'
-import { SetComposing, SetNewItem, FormEvent } from '../types/types'
+import {
+  SheetItem,
+  IsComposing,
+  NewItem,
+  Calculations,
+  BudgetData
+} from '../interfaces/interfaces'
+import {
+  SetComposing,
+  SetNewItem,
+  FormEvent
+} from '../types/types'
 
 interface Props {
   activeBudget: BudgetData

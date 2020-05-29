@@ -1,7 +1,12 @@
 import React from 'react'
-import { Calculations, BudgetData } from '../interfaces/interfaces'
 
 import remove from '../images/remove.png'
+
+import {
+  Calculations,
+  BudgetData
+} from '../interfaces/interfaces'
+
 
 interface Props {
   activeBudget: BudgetData

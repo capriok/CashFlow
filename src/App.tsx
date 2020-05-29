@@ -21,18 +21,16 @@ import {
 import { FormEvent } from './types/types'
 
 export const App: React.FC = () => {
+  const [user, setUser] = useState<User>({
+    isAuth: false, name: ''
+  })
   const [budgets, setBudgets] = useState<BudgetItem[]>([])
+  const [isDeleting, setDeleting] = useState<boolean>(false)
   const [activeBudget, setActiveBudget] = useState<BudgetData>({
     name: '',
     incomes: [],
     expenses: []
   })
-  const [user, setUser] = useState<User>({
-    isAuth: false, name: ''
-  })
-  const [isDeleting, setDeleting] = useState<boolean>(
-    false
-  )
   const [isComposing, setCompose] = useState<IsComposing>({
     income: false, expense: false
   })
@@ -59,6 +57,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     isUser && setUser(JSON.parse(isUser))
+    user.isAuth && console.log('User -> ', user.name);
     hasBudgets && setBudgets(JSON.parse(hasBudgets))
     hasActive && setActiveBudget(JSON.parse(hasActive))
   }, [user.isAuth])
@@ -66,12 +65,14 @@ export const App: React.FC = () => {
   useEffect(() => {
     if (user.isAuth) {
       localStorage.setItem(`CF-budgets$${user.name}`, JSON.stringify(budgets))
+      console.log('All Budgets', budgets);
     }
   }, [budgets])
 
   useEffect(() => {
     if (user.isAuth && activeBudget.name !== '') {
       localStorage.setItem(`CF-active$${user.name}`, JSON.stringify(activeBudget))
+      console.log('Active Budget', activeBudget);
     }
   }, [activeBudget])
 
@@ -94,7 +95,7 @@ export const App: React.FC = () => {
 
   const composeSheetType = (type: string): void => {
     if (budgets.length === 0) {
-      alert('Create a budget first')
+      alert('Select a budget first')
       return
     } else {
       if (type === 'income') {
@@ -163,8 +164,6 @@ export const App: React.FC = () => {
         return id2 === id1
       })
     })
-    console.log(incomeFilter);
-
     setActiveBudget({ ...activeBudget, incomes: incomeFilter, expenses: expenseFilter })
     toggleDeletion()
   }
@@ -200,20 +199,14 @@ export const App: React.FC = () => {
       let indexofactive = budgets.findIndex(o => {
         return o.name === activeBudget.name
       })
-      let filteredBudgets = budgets.filter(budget => {
-        return budget.name !== activeBudget.name
-      })
-      let updatedBudgetData = budgets[indexofactive].data = activeBudget
+      let budgetArray = budgets
+      let updatedBudgetData = budgetArray[indexofactive].data = activeBudget
       let updatedBudget = {
-        ...budgets[indexofactive],
+        ...budgetArray[indexofactive],
         data: updatedBudgetData
       }
-      // instead of filtering out old budget and adding the updated budget
-      // make form new budgets arr, spread it, splice in updated one at old index
-      setBudgets([
-        ...filteredBudgets,
-        updatedBudget
-      ])
+      budgetArray.splice(indexofactive, 1, updatedBudget)
+      setBudgets(budgetArray)
     }
   }, [activeBudget])
 
@@ -224,8 +217,6 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     calculateResults()
-    console.log(activeBudget);
-
   }, [activeBudget.incomes, activeBudget.expenses])
 
   return (
@@ -237,8 +228,10 @@ export const App: React.FC = () => {
           : <>
             <AppHeader
               user={user}
+              setUser={setUser}
               budgets={budgets}
               activeBudget={activeBudget}
+              setActiveBudget={setActiveBudget}
               setBudgets={setBudgets}
               handlebudgetSelect={handlebudgetSelect} />
             <SheetHead

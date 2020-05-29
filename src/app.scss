@@ -125,6 +125,12 @@ $main-section: rgb(215, 215, 215);
       color: white;
       text-transform: capitalize;
     }
+    .logout {
+      width: 20px;
+      position: absolute;
+      top: 15px;
+      left: 15px;
+    }
     .menu-btn {
       z-index: 100;
       position: absolute;

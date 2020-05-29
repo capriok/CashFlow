@@ -1,4 +1,4 @@
-import { User, IsComposing, NewItem, BudgetItem } from '../interfaces/interfaces';
+import { User, IsComposing, NewItem, BudgetItem, BudgetData } from '../interfaces/interfaces';
 import { Dispatch } from 'react';
 
 export type InputEvent = React.ChangeEvent<HTMLInputElement>
@@ -8,3 +8,4 @@ export type SetComposing = Dispatch<IsComposing>
 export type SetNewItem = Dispatch<NewItem>
 export type SetUser = Dispatch<User>
 export type SetBudgets = Dispatch<BudgetItem[]>
+export type SetActiveBudget = Dispatch<BudgetData>

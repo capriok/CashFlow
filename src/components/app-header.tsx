@@ -2,8 +2,19 @@ import React, { useState } from 'react'
 
 import short from 'short-uuid'
 
-import { User, BudgetItem, BudgetData } from '../interfaces/interfaces'
-import { SetBudgets, FormEvent } from '../types/types'
+import logout from '../images/logout.png'
+
+import {
+  User,
+  BudgetItem,
+  BudgetData
+} from '../interfaces/interfaces'
+import {
+  SetUser,
+  SetBudgets,
+  SetActiveBudget,
+  FormEvent
+} from '../types/types'
 
 import banner from '../images/head-banner.jpg'
 import card from '../images/head-cc.png'
@@ -12,8 +23,10 @@ import deletePNG from '../images/delete.png'
 
 interface Props {
   user: User
+  setUser: SetUser
   budgets: BudgetItem[]
   activeBudget: BudgetData
+  setActiveBudget: SetActiveBudget
   setBudgets: SetBudgets
   handlebudgetSelect: (i: number) => void
 }
@@ -22,22 +35,44 @@ const AppHeader: React.FC<Props> = ({
   user,
   budgets,
   activeBudget,
+  setActiveBudget,
   setBudgets,
   handlebudgetSelect }) => {
 
-  const [menuOpen, setMenu] = useState<boolean>(true)
+  const [menuOpen, setMenu] = useState<boolean>(false)
   const [composing, setComposing] = useState<boolean>(false)
   const [budgetName, setBudgetName] = useState<string>('')
 
   const deleteBugdet = (index: number) => {
-    let newBudgets = budgets.filter((b, i) => i !== index)
+    let newBudgets = budgets.filter((b, i) => {
+      return i !== index
+    })
     setBudgets(newBudgets);
+    let indexofactive = budgets.findIndex(o => {
+      return o.name === activeBudget.name
+    })
+    if (index === indexofactive) {
+      setActiveBudget({
+        name: '',
+        incomes: [],
+        expenses: []
+      })
+      localStorage.removeItem(`CF-active$${user.name}`)
+    }
   }
 
   const handleForm = (e: FormEvent) => {
     e.preventDefault()
     let id = short.generate();
-    if (budgetName) {
+
+    let isDupe = false
+    budgets.forEach(({ name }) => {
+      if (name === budgetName) {
+        return isDupe = true
+      }
+    })
+
+    if (budgetName && !isDupe) {
       setBudgets([
         ...budgets, {
           isActive: false,
@@ -56,8 +91,7 @@ const AppHeader: React.FC<Props> = ({
 
   return (
     <header className="app-header">
-      <p
-        className={menuOpen ? 'menu-btn inv' : 'menu-btn'}
+      <p className={menuOpen ? 'menu-btn inv' : 'menu-btn'}
         onClick={() => setMenu(!menuOpen)}>☰</p>
       {menuOpen
         ? <div className="header-menu">
@@ -100,11 +134,15 @@ const AppHeader: React.FC<Props> = ({
           </div>
         </div>
         : <>
+          <img className="logout" src={logout} alt="" onClick={() => {
+            localStorage.removeItem('CF-user')
+            window.location.href = '/'
+          }} />
           <div className="banner">
             <img src={banner} alt="" />
           </div>
           <img className="cc" src={card} alt="" />
-          <p className="username">{user.name}</p>
+          <p className="username" >{user.name}</p>
         </>
       }
     </header>

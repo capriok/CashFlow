@@ -1,8 +1,14 @@
 import React from 'react'
 
 import greetLogo from '../images/greet-logo.png'
-import { SetUser, FormEvent } from '../types/types'
-import { User } from '../interfaces/interfaces'
+
+import {
+  User
+} from '../interfaces/interfaces'
+import {
+  SetUser,
+  FormEvent
+} from '../types/types'
 
 interface Props {
   user: User
