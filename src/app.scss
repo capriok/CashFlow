@@ -349,13 +349,10 @@ $main-section: rgb(215, 215, 215);
 
 @media (min-width: 500px) {
   $size: 500px;
-  body {
-    background-color: rgb(100, 100, 100);
-  }
   .notice {
     display: block;
     user-select: none;
-    color: white;
+    color: black;
     text-align: center;
     margin: 20px auto;
     padding-bottom: 5px;
