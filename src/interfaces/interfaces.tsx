@@ -4,8 +4,9 @@ export interface User {
 }
 
 export interface BudgetItem {
-  isActive: boolean,
+  id: string,
   name: string,
+  isActive: boolean,
   data: BudgetData
 }
 

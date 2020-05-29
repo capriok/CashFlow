@@ -27,8 +27,6 @@ export const App: React.FC = () => {
     incomes: [],
     expenses: []
   })
-  // const [incomes, setIncomes] = useState<SheetItem[]>([])
-  // const [expenses, setExpenses] = useState<SheetItem[]>([])
   const [isDeleting, setDeleting] = useState<boolean>(false)
   const [user, setUser] = useState<User>({
     isAuth: false, name: ''
@@ -79,7 +77,20 @@ export const App: React.FC = () => {
   //    MAIN FUNCTIONS    ////////////////////////////////////////
   ////////////////////////////////////////
 
-  const composeType = (type: string): void => {
+  const closeCompose = (): void => {
+    setCompose({ income: false, expense: false })
+    setNewItem({ name: '', value: 0 })
+  }
+
+  const toggleDeletion = (): void => {
+    setDeleting(!isDeleting)
+    setSelection({
+      incomes: [],
+      expenses: []
+    })
+  }
+
+  const composeSheetType = (type: string): void => {
     if (budgets.length === 0) {
       alert('Create a budget first')
       return
@@ -92,16 +103,14 @@ export const App: React.FC = () => {
     }
   }
 
-  const addType = (e: FormEvent): void => {
+  const addToDataSheet = (e: FormEvent): void => {
     e.preventDefault()
     let type: string = e.target.name
     let id = short.generate();
     let { name } = newItem
     let { value } = newItem
     if (!name || !value) return
-
     let sheetItem = { id, name, value }
-
     switch (type) {
       case 'income':
         setActiveBudget({
@@ -125,58 +134,6 @@ export const App: React.FC = () => {
         break;
     }
     closeCompose()
-
-    // let allInc = [...activeBudget.incomes]
-    // let allExp = [...activeBudget.expenses]
-    // let data = {
-    //   name: activeBudget.name,
-    //   incomes: allInc,
-    //   expenses: allExp
-    // }
-
-    // let indexofactive = budgets.findIndex(o => o.name === activeBudget.name)
-    // let injectData = budgets[indexofactive].data = data
-    // let updatedBudget: BudgetItem = {
-    //   isActive: true,
-    //   name: activeBudget.name,
-    //   data: injectData
-    // }
-
-    // setBudgets([
-    //   ...budgets,
-    //   updatedBudget
-    // ])
-  }
-
-  useEffect(() => {
-    if (user.isAuth && activeBudget.name !== '') {
-      let indexofactive = budgets.findIndex(o => o.name === activeBudget.name)
-      console.log(indexofactive);
-      let filteredBudgets = budgets.filter(budget => budget.name !== activeBudget.name)
-      let updatedBudgetData = budgets[indexofactive].data = activeBudget
-      let updatedBudget = {
-        isActive: false,
-        name: activeBudget.name,
-        data: updatedBudgetData
-      }
-      setBudgets([
-        ...filteredBudgets,
-        updatedBudget
-      ])
-    }
-  }, [activeBudget])
-
-  const closeCompose = (): void => {
-    setCompose({ income: false, expense: false })
-    setNewItem({ name: '', value: 0 })
-  }
-
-  const toggleDeletion = (): void => {
-    setDeleting(!isDeleting)
-    setSelection({
-      incomes: [],
-      expenses: []
-    })
   }
 
   const handleCheckbox = (type: string, item: SheetItem): void => {
@@ -204,8 +161,9 @@ export const App: React.FC = () => {
         return id2 === id1
       })
     })
-    setActiveBudget({ ...activeBudget, incomes: incomeFilter })
-    setActiveBudget({ ...activeBudget, expenses: expenseFilter })
+    console.log(incomeFilter);
+
+    setActiveBudget({ ...activeBudget, incomes: incomeFilter, expenses: expenseFilter })
     toggleDeletion()
   }
 
@@ -235,12 +193,37 @@ export const App: React.FC = () => {
     });
   }
 
+  useEffect(() => {
+    if (user.isAuth && activeBudget.name !== '' && budgets.length > 0) {
+      let indexofactive = budgets.findIndex(o => {
+        return o.name === activeBudget.name
+      })
+      let filteredBudgets = budgets.filter(budget => {
+        return budget.name !== activeBudget.name
+      })
+      let updatedBudgetData = budgets[indexofactive].data = activeBudget
+      let updatedBudget = {
+        ...budgets[indexofactive],
+        data: updatedBudgetData
+      }
+      // instead of filtering out old budget and adding the updated budget
+      // make form new budgets arr, spread it, splice in updated one at old index
+      setBudgets([
+        ...filteredBudgets,
+        updatedBudget
+      ])
+    }
+  }, [activeBudget])
+
+
   ////////////////////////////////////////
   //    ACTIONS ON CHANGES    ////////////////////////////////////////
   ////////////////////////////////////////
 
   useEffect(() => {
     calculateResults()
+    console.log(activeBudget);
+
   }, [activeBudget.incomes, activeBudget.expenses])
 
   return (
@@ -269,10 +252,10 @@ export const App: React.FC = () => {
               setCompose={setCompose}
               isDeleting={isDeleting}
               handleCheckbox={handleCheckbox}
-              addType={addType}
+              addType={addToDataSheet}
             />
             <ActionBox
-              composeType={composeType}
+              composeType={composeSheetType}
               isComposing={isComposing}
               closeCompose={closeCompose}
               isDeleting={isDeleting}
