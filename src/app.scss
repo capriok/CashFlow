@@ -65,10 +65,10 @@ $main-section: rgb(215, 215, 215);
       opacity: 0.6;
     }
     .inner-box {
-      width: 90vw;
+      width: 100vw;
       padding: 25px 0;
-      border-radius: 10px;
-      border: 2px solid steelblue;
+      border-top: 2px solid steelblue;
+      border-bottom: 2px solid steelblue;
       background-color: rgba(255, 255, 255, 0.7);
       h1 {
         padding-bottom: 25px;
@@ -115,7 +115,7 @@ $main-section: rgb(215, 215, 215);
       position: absolute;
       left: 15px;
       bottom: 10px;
-      width: 55%;
+      width: 50%;
     }
     .username {
       position: absolute;
@@ -370,32 +370,44 @@ $main-section: rgb(215, 215, 215);
     margin: 0 auto;
     border-radius: 10px;
     border: 3px solid black;
-  }
-  .app-header {
-    min-height: 200px;
-    .banner {
-      height: 200px !important;
-    }
+    background-color: white;
   }
   .greetbox {
+    z-index: 1;
     .greet-logo {
       position: absolute !important;
-      min-height: 100%;
-      opacity: 0.6;
-    }
-    .inner-box {
-      width: 90%;
+      opacity: 0.6 !important;
     }
   }
   .app-header {
     user-select: none;
-    .logout {
+    min-height: 215px !important;
+    .banner {
+      height: 215px !important;
+    }
+    .logout,
+    .menu-btn {
       cursor: pointer !important;
+    }
+    .header-menu {
+      min-height: 220px !important;
+      .menu-btn {
+        cursor: pointer !important;
+      }
+      .budget-list {
+        .item {
+          img {
+            height: 100%;
+            margin-left: 15px;
+            cursor: pointer;
+          }
+        }
+      }
     }
   }
   .sheet-head {
     min-height: 40px !important;
-    .ham {
+    .delete {
       user-select: none;
       cursor: pointer;
     }
