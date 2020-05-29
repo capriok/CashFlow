@@ -5,7 +5,14 @@ export interface User {
 
 export interface BudgetItem {
   isActive: boolean,
-  name: string
+  name: string,
+  data: BudgetData
+}
+
+export interface BudgetData {
+  name: string,
+  incomes: SheetItem[],
+  expenses: SheetItem[]
 }
 
 export interface SheetItem {

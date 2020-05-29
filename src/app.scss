@@ -228,7 +228,7 @@ $main-section: rgb(215, 215, 215);
     .delete {
       @include flex;
       justify-content: flex-end;
-      width: 20px;
+      width: 18px;
       transition: all 0.05s;
       &:active {
         transition: all 0.05s;

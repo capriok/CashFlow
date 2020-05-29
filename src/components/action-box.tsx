@@ -1,6 +1,5 @@
 import React from 'react'
 import { IsComposing } from '../interfaces/interfaces'
-import { SetComposing } from '../types/types'
 
 interface Props {
   composeType: (type: string) => void,

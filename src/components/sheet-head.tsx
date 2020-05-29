@@ -1,16 +1,15 @@
 import React from 'react'
-import { Calculations, SheetItem } from '../interfaces/interfaces'
+import { Calculations, SheetItem, BudgetData } from '../interfaces/interfaces'
 
-import deletePNG from '../images/delete.png'
+import remove from '../images/remove.png'
 
 interface Props {
-  incomes: SheetItem[],
-  expenses: SheetItem[],
+  activeBudget: BudgetData,
   results: Calculations,
   toggleDeletion: () => void
 }
 
-const SheetHead: React.FC<Props> = ({ incomes, expenses, results, toggleDeletion }) => {
+const SheetHead: React.FC<Props> = ({ activeBudget, results, toggleDeletion }) => {
   const calculateBalence = (): string => {
     return results.balence === 0
       ? 'neut'
@@ -21,8 +20,8 @@ const SheetHead: React.FC<Props> = ({ incomes, expenses, results, toggleDeletion
   return (
     <header className="sheet-head">
       <p>Balence: $ <span className={calculateBalence()}>{results.balence.toFixed(2)}</span></p>
-      {(incomes.length > 0 || expenses.length > 0) &&
-        <img src={deletePNG} alt="" className="delete" onClick={() => toggleDeletion()} />}
+      {(activeBudget.incomes.length > 0 || activeBudget.expenses.length > 0) &&
+        <img src={remove} alt="" className="delete" onClick={() => toggleDeletion()} />}
     </header>
   )
 }

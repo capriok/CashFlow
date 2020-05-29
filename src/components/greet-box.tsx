@@ -1,8 +1,7 @@
-import React, { Dispatch } from 'react'
+import React from 'react'
 
 import greetLogo from '../images/greet-logo.png'
 import { SetUser, FormEvent } from '../types/types'
-import { userInfo } from 'os'
 import { User } from '../interfaces/interfaces'
 
 interface Props {

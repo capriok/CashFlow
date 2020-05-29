@@ -11,10 +11,11 @@ import deletePNG from '../images/delete.png'
 interface Props {
   user: User,
   budgets: BudgetItem[],
-  setBudgets: SetBudgets
+  setBudgets: SetBudgets,
+  handlebudgetSelect: (i: number) => void
 }
 
-const AppHeader: React.FC<Props> = ({ user, budgets, setBudgets }) => {
+const AppHeader: React.FC<Props> = ({ user, budgets, setBudgets, handlebudgetSelect }) => {
   const [menuOpen, setMenu] = useState<boolean>(true)
   const [composing, setComposing] = useState<boolean>(false)
   const [budgetName, setBudgetName] = useState<string>('')
@@ -37,7 +38,16 @@ const AppHeader: React.FC<Props> = ({ user, budgets, setBudgets }) => {
               <form id="budgetForm" onSubmit={e => {
                 e.preventDefault()
                 if (budgetName) {
-                  setBudgets([...budgets, { isActive: false, name: budgetName }])
+                  setBudgets([
+                    ...budgets, {
+                      isActive: false,
+                      name: budgetName,
+                      data: {
+                        name: budgetName,
+                        incomes: [],
+                        expenses: []
+                      }
+                    }])
                   setBudgetName('')
                   setComposing(false)
                 }
@@ -52,7 +62,7 @@ const AppHeader: React.FC<Props> = ({ user, budgets, setBudgets }) => {
             }
             {budgets.map((budget, i) => (
               <div className="item">
-                <li>{budget.name}</li>
+                <li onClick={() => handlebudgetSelect(i)}>{budget.name}</li>
                 <img src={deletePNG} alt=""
                   onClick={() => {
                     deleteBugdet(i)
@@ -63,7 +73,7 @@ const AppHeader: React.FC<Props> = ({ user, budgets, setBudgets }) => {
           <div className="compose-btns-cont">
             {composing
               ? <>
-                <button className="compose-btn" form="budgetForm">Submit Budget</button>
+                <button className="compose-btn" form="budgetForm">Create Budget</button>
                 <div className="divider"></div>
                 <p className="compose-btn" onClick={() => setComposing(!composing)}>Cancel</p>
               </>

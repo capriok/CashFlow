@@ -11,6 +11,7 @@ import ActionBox from './components/action-box'
 import {
   User,
   BudgetItem,
+  BudgetData,
   SheetItem,
   IsComposing,
   NewItem,
@@ -21,8 +22,13 @@ import { FormEvent } from './types/types'
 
 export const App: React.FC = () => {
   const [budgets, setBudgets] = useState<BudgetItem[]>([])
-  const [incomes, setIncomes] = useState<SheetItem[]>([])
-  const [expenses, setExpenses] = useState<SheetItem[]>([])
+  const [activeBudget, setActiveBudget] = useState<BudgetData>({
+    name: '',
+    incomes: [],
+    expenses: []
+  })
+  // const [incomes, setIncomes] = useState<SheetItem[]>([])
+  // const [expenses, setExpenses] = useState<SheetItem[]>([])
   const [isDeleting, setDeleting] = useState<boolean>(false)
   const [user, setUser] = useState<User>({
     isAuth: false, name: ''
@@ -43,33 +49,46 @@ export const App: React.FC = () => {
     expenses: []
   })
 
+  ////////////////////////////////////////
+  //    LOCALSTORAGE SETTERS    ////////////////////////////////////////
+  ////////////////////////////////////////
+
   const isUser = localStorage.getItem(`CF-user`)
-  const hasIncomes = localStorage.getItem(`CF-incomes$${user.name}`)
-  const hasExpenses = localStorage.getItem(`CF-expenses$${user.name}`)
   const hasBudgets = localStorage.getItem(`CF-budgets$${user.name}`)
+  const hasActive = localStorage.getItem(`CF-active$${user.name}`)
+
   useEffect(() => {
     isUser && setUser(JSON.parse(isUser))
-    hasIncomes && setIncomes(JSON.parse(hasIncomes))
-    hasExpenses && setExpenses(JSON.parse(hasExpenses))
     hasBudgets && setBudgets(JSON.parse(hasBudgets))
+    hasActive && setActiveBudget(JSON.parse(hasActive))
   }, [user.isAuth])
-  useEffect(() => {
-    if (user.isAuth) {
-      localStorage.setItem(`CF-incomes$${user.name}`, JSON.stringify(incomes))
-      localStorage.setItem(`CF-expenses$${user.name}`, JSON.stringify(expenses))
-    }
-  }, [incomes, expenses])
+
   useEffect(() => {
     if (user.isAuth) {
       localStorage.setItem(`CF-budgets$${user.name}`, JSON.stringify(budgets))
     }
   }, [budgets])
 
+  useEffect(() => {
+    if (user.isAuth && activeBudget.name !== '') {
+      localStorage.setItem(`CF-active$${user.name}`, JSON.stringify(activeBudget))
+    }
+  }, [activeBudget])
+
+  ////////////////////////////////////////
+  //    MAIN FUNCTIONS    ////////////////////////////////////////
+  ////////////////////////////////////////
+
   const composeType = (type: string): void => {
-    if (type === 'income') {
-      setCompose({ expense: false, income: !isComposing.income })
-    } else if (type === 'expense') {
-      setCompose({ income: false, expense: !isComposing.expense })
+    if (budgets.length === 0) {
+      alert('Create a budget first')
+      return
+    } else {
+      if (type === 'income') {
+        setCompose({ expense: false, income: !isComposing.income })
+      } else if (type === 'expense') {
+        setCompose({ income: false, expense: !isComposing.expense })
+      }
     }
   }
 
@@ -80,24 +99,72 @@ export const App: React.FC = () => {
     let { name } = newItem
     let { value } = newItem
     if (!name || !value) return
+
+    let sheetItem = { id, name, value }
+
     switch (type) {
       case 'income':
-        setIncomes([
-          ...incomes,
-          { id, name, value }
-        ])
+        setActiveBudget({
+          ...activeBudget,
+          incomes: [
+            ...activeBudget.incomes,
+            sheetItem
+          ]
+        })
         break;
       case 'expense':
-        setExpenses([
-          ...expenses,
-          { id, name, value }
-        ])
+        setActiveBudget({
+          ...activeBudget,
+          expenses: [
+            ...activeBudget.expenses,
+            sheetItem
+          ]
+        })
         break;
       default:
         break;
     }
     closeCompose()
+
+    // let allInc = [...activeBudget.incomes]
+    // let allExp = [...activeBudget.expenses]
+    // let data = {
+    //   name: activeBudget.name,
+    //   incomes: allInc,
+    //   expenses: allExp
+    // }
+
+    // let indexofactive = budgets.findIndex(o => o.name === activeBudget.name)
+    // let injectData = budgets[indexofactive].data = data
+    // let updatedBudget: BudgetItem = {
+    //   isActive: true,
+    //   name: activeBudget.name,
+    //   data: injectData
+    // }
+
+    // setBudgets([
+    //   ...budgets,
+    //   updatedBudget
+    // ])
   }
+
+  useEffect(() => {
+    if (user.isAuth && activeBudget.name !== '') {
+      let indexofactive = budgets.findIndex(o => o.name === activeBudget.name)
+      console.log(indexofactive);
+      let filteredBudgets = budgets.filter(budget => budget.name !== activeBudget.name)
+      let updatedBudgetData = budgets[indexofactive].data = activeBudget
+      let updatedBudget = {
+        isActive: false,
+        name: activeBudget.name,
+        data: updatedBudgetData
+      }
+      setBudgets([
+        ...filteredBudgets,
+        updatedBudget
+      ])
+    }
+  }, [activeBudget])
 
   const closeCompose = (): void => {
     setCompose({ income: false, expense: false })
@@ -112,8 +179,7 @@ export const App: React.FC = () => {
     })
   }
 
-
-  const handleCheckbox = (type: string, item: SheetItem, i: number): void => {
+  const handleCheckbox = (type: string, item: SheetItem): void => {
     if (type === 'income') {
       setSelection({
         ...selection,
@@ -128,24 +194,24 @@ export const App: React.FC = () => {
   }
 
   const deleteSelection = (): void => {
-    const incomeFilter = incomes.filter(({ id: id1 }) => {
+    const incomeFilter = activeBudget.incomes.filter(({ id: id1 }) => {
       return !selection.incomes.some(({ id: id2 }) => {
         return id2 === id1
       })
     })
-    const expenseFilter = expenses.filter(({ id: id1 }) => {
+    const expenseFilter = activeBudget.expenses.filter(({ id: id1 }) => {
       return !selection.expenses.some(({ id: id2 }) => {
         return id2 === id1
       })
     })
-    setIncomes(incomeFilter)
-    setExpenses(expenseFilter)
+    setActiveBudget({ ...activeBudget, incomes: incomeFilter })
+    setActiveBudget({ ...activeBudget, expenses: expenseFilter })
     toggleDeletion()
   }
 
   const calculateResults = (): void => {
-    let inVals = incomes.reduce((acc, cur) => acc + cur.value, 0)
-    let exVals = expenses.reduce((acc, cur) => acc + cur.value, 0)
+    let inVals = activeBudget.incomes.reduce((acc, cur) => acc + cur.value, 0)
+    let exVals = activeBudget.expenses.reduce((acc, cur) => acc + cur.value, 0)
     setResults({
       balence: inVals - exVals,
       income: inVals,
@@ -153,9 +219,29 @@ export const App: React.FC = () => {
     })
   }
 
+  const handlebudgetSelect = (index: number): void => {
+    let newBudgets = budgets
+    newBudgets.forEach((b, i) => {
+      budgets[i].isActive = false
+      if (index === i) {
+        budgets[index].isActive = true
+      }
+    })
+    setBudgets(newBudgets)
+    budgets.forEach(obj => {
+      if (obj.isActive) {
+        setActiveBudget(obj.data)
+      }
+    });
+  }
+
+  ////////////////////////////////////////
+  //    ACTIONS ON CHANGES    ////////////////////////////////////////
+  ////////////////////////////////////////
+
   useEffect(() => {
     calculateResults()
-  }, [incomes, expenses])
+  }, [activeBudget.incomes, activeBudget.expenses])
 
   return (
     <>
@@ -167,16 +253,15 @@ export const App: React.FC = () => {
             <AppHeader
               user={user}
               budgets={budgets}
-              setBudgets={setBudgets} />
+              setBudgets={setBudgets}
+              handlebudgetSelect={handlebudgetSelect} />
             <SheetHead
-              incomes={incomes}
-              expenses={expenses}
+              activeBudget={activeBudget}
               results={results}
               toggleDeletion={toggleDeletion}
             />
             <DataSheet
-              incomes={incomes}
-              expenses={expenses}
+              activeBudget={activeBudget}
               results={results}
               newItem={newItem}
               setNewItem={setNewItem}
