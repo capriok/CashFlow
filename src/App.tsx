@@ -27,10 +27,12 @@ export const App: React.FC = () => {
     incomes: [],
     expenses: []
   })
-  const [isDeleting, setDeleting] = useState<boolean>(false)
   const [user, setUser] = useState<User>({
     isAuth: false, name: ''
   })
+  const [isDeleting, setDeleting] = useState<boolean>(
+    false
+  )
   const [isComposing, setCompose] = useState<IsComposing>({
     income: false, expense: false
   })
@@ -236,6 +238,7 @@ export const App: React.FC = () => {
             <AppHeader
               user={user}
               budgets={budgets}
+              activeBudget={activeBudget}
               setBudgets={setBudgets}
               handlebudgetSelect={handlebudgetSelect} />
             <SheetHead

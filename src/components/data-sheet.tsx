@@ -4,14 +4,14 @@ import { SheetItem, IsComposing, NewItem, Calculations, BudgetData } from '../in
 import { SetComposing, SetNewItem, FormEvent } from '../types/types'
 
 interface Props {
-  activeBudget: BudgetData,
-  results: Calculations,
-  isComposing: IsComposing,
-  setCompose: SetComposing;
-  newItem: NewItem,
-  setNewItem: SetNewItem,
-  isDeleting: boolean,
-  handleCheckbox: (type: string, item: SheetItem) => void,
+  activeBudget: BudgetData
+  results: Calculations
+  isComposing: IsComposing
+  setCompose: SetComposing
+  newItem: NewItem
+  setNewItem: SetNewItem
+  isDeleting: boolean
+  handleCheckbox: (type: string, item: SheetItem) => void
   addType: (e: FormEvent) => void
 }
 
@@ -24,6 +24,7 @@ const ValueSheet: React.FC<Props> = ({
   isDeleting,
   handleCheckbox,
   addType }) => {
+
   return (
     <div className="data-sheet" onTouchStart={() => { }}>
       <section id="incomes">

@@ -2,14 +2,13 @@ import React from 'react'
 import { IsComposing } from '../interfaces/interfaces'
 
 interface Props {
-  composeType: (type: string) => void,
-  isComposing: IsComposing,
-  isDeleting: boolean,
-  closeCompose: () => void,
-  toggleDeletion: () => void,
+  composeType: (type: string) => void
+  isComposing: IsComposing
+  isDeleting: boolean
+  closeCompose: () => void
+  toggleDeletion: () => void
   deleteSelection: () => void
 }
-
 
 const ActionBox: React.FC<Props> = ({
   composeType,
@@ -18,6 +17,7 @@ const ActionBox: React.FC<Props> = ({
   closeCompose,
   toggleDeletion,
   deleteSelection }) => {
+
   return (
     <div className="action-box">
       {isDeleting

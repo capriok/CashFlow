@@ -1,15 +1,19 @@
 import React from 'react'
-import { Calculations, SheetItem, BudgetData } from '../interfaces/interfaces'
+import { Calculations, BudgetData } from '../interfaces/interfaces'
 
 import remove from '../images/remove.png'
 
 interface Props {
-  activeBudget: BudgetData,
-  results: Calculations,
+  activeBudget: BudgetData
+  results: Calculations
   toggleDeletion: () => void
 }
 
-const SheetHead: React.FC<Props> = ({ activeBudget, results, toggleDeletion }) => {
+const SheetHead: React.FC<Props> = ({
+  activeBudget,
+  results,
+  toggleDeletion }) => {
+
   const calculateBalence = (): string => {
     return results.balence === 0
       ? 'neut'

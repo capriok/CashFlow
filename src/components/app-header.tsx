@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import short from 'short-uuid'
 
-import { User, BudgetItem } from '../interfaces/interfaces'
+import { User, BudgetItem, BudgetData } from '../interfaces/interfaces'
 import { SetBudgets, FormEvent } from '../types/types'
 
 import banner from '../images/head-banner.jpg'
@@ -11,13 +11,20 @@ import deletePNG from '../images/delete.png'
 
 
 interface Props {
-  user: User,
-  budgets: BudgetItem[],
-  setBudgets: SetBudgets,
+  user: User
+  budgets: BudgetItem[]
+  activeBudget: BudgetData
+  setBudgets: SetBudgets
   handlebudgetSelect: (i: number) => void
 }
 
-const AppHeader: React.FC<Props> = ({ user, budgets, setBudgets, handlebudgetSelect }) => {
+const AppHeader: React.FC<Props> = ({
+  user,
+  budgets,
+  activeBudget,
+  setBudgets,
+  handlebudgetSelect }) => {
+
   const [menuOpen, setMenu] = useState<boolean>(true)
   const [composing, setComposing] = useState<boolean>(false)
   const [budgetName, setBudgetName] = useState<string>('')
@@ -79,11 +86,16 @@ const AppHeader: React.FC<Props> = ({ user, budgets, setBudgets, handlebudgetSel
           <div className="compose-btns-cont">
             {composing
               ? <>
-                <button className="compose-btn" form="budgetForm">Create Budget</button>
+                <button className="menu-btn" form="budgetForm">Create Budget</button>
                 <div className="divider"></div>
-                <p className="compose-btn" onClick={() => setComposing(!composing)}>Cancel</p>
+                <p className="menu-btn" onClick={() => setComposing(!composing)}>Cancel</p>
               </>
-              : <p className="compose-btn" onClick={() => setComposing(!composing)}>New Budget</p>
+              :
+              <>
+                <p className="menu-btn" onClick={() => setComposing(!composing)}>New Budget</p>
+                <div className="divider"></div>
+                <p className="menu-p">Active: {activeBudget.name}</p>
+              </>
             }
           </div>
         </div>

@@ -158,12 +158,16 @@ $main-section: rgb(215, 215, 215);
           height: 100%;
           background-color: steelblue;
         }
-        .compose-btn {
+        .menu-p {
+          flex: 1.5;
+          text-transform: capitalize;
+          font-weight: bold;
+        }
+        .menu-btn {
           all: unset;
           flex: 1;
           font-weight: bold;
           @include flex;
-          height: 30px;
           transition: all 0.05s;
           &:active {
             transition: all 0.05s;
@@ -174,8 +178,10 @@ $main-section: rgb(215, 215, 215);
       .composing-input {
         outline: none;
         border: none;
-        padding: 3px 0;
-        margin-left: 10px;
+        padding: 1px 0;
+        padding-left: 10px;
+        border-left: 2px solid steelblue;
+        border-bottom: 2px solid steelblue;
         background-color: transparent;
       }
       .budget-list {
@@ -195,13 +201,21 @@ $main-section: rgb(215, 215, 215);
           @include flex;
           justify-content: space-between;
           width: 100%;
+          margin-top: 5px;
           li {
             cursor: pointer;
+            text-transform: capitalize;
             width: fit-content;
-            padding-right: 20px;
-            padding-top: 5px;
+            padding: 1px 10px 1px 0;
             text-indent: 10px;
             list-style: none;
+            border-left: 2px solid steelblue;
+            border-bottom: 2px solid steelblue;
+            transition: all 0.05s;
+            &:active {
+              transition: all 0.05s;
+              transform: scale(0.98);
+            }
           }
           img {
             width: 20px;
