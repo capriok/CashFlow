@@ -47,10 +47,6 @@ export const App: React.FC = () => {
     expenses: []
   })
 
-  ////////////////////////////////////////
-  //    LOCALSTORAGE SETTERS    ////////////////////////////////////////
-  ////////////////////////////////////////
-
   const isUser = localStorage.getItem(`CF-user`)
   const hasBudgets = localStorage.getItem(`CF-budgets$${user.name}`)
   const hasActive = localStorage.getItem(`CF-active$${user.name}`)
@@ -75,10 +71,6 @@ export const App: React.FC = () => {
       console.log('Active Budget', activeBudget);
     }
   }, [activeBudget])
-
-  ////////////////////////////////////////
-  //    MAIN FUNCTIONS    ////////////////////////////////////////
-  ////////////////////////////////////////
 
   const closeCompose = (): void => {
     setCompose({ income: false, expense: false })
@@ -209,11 +201,6 @@ export const App: React.FC = () => {
       setBudgets(budgetArray)
     }
   }, [activeBudget])
-
-
-  ////////////////////////////////////////
-  //    ACTIONS ON CHANGES    ////////////////////////////////////////
-  ////////////////////////////////////////
 
   useEffect(() => {
     calculateResults()

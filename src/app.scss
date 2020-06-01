@@ -126,24 +126,34 @@ $main-section: rgb(215, 215, 215);
       text-transform: capitalize;
     }
     .logout {
-      width: 20px;
+      box-sizing: content-box;
       position: absolute;
-      top: 15px;
-      left: 15px;
+      top: 10px;
+      left: 10px;
+      width: 20px;
+      padding: 3px;
+      border-radius: 50%;
+      background-color: $light-grey;
     }
     .menu-btn {
+      box-sizing: content-box;
+      @include flex;
       z-index: 100;
       position: absolute;
-      top: 15px;
-      right: 15px;
-      width: 25px;
+      top: 10px;
+      right: 10px;
+      width: 20px;
       height: 20px;
       font-size: 1.4rem;
-      color: white;
+      color: black;
+      padding: 3px;
+      border-radius: 50%;
+      background-color: $light-grey;
       transform: rotate(180deg);
     }
     .inv {
       color: black;
+      background-color: unset;
     }
     .header-menu {
       z-index: 50;
@@ -164,12 +174,13 @@ $main-section: rgb(215, 215, 215);
           height: 100%;
           background-color: steelblue;
         }
-        .menu-p {
+        .menu-active-text {
           flex: 1.5;
           text-transform: capitalize;
           font-weight: bold;
         }
         .menu-btn {
+          color: black;
           all: unset;
           flex: 1;
           font-weight: bold;
@@ -190,6 +201,7 @@ $main-section: rgb(215, 215, 215);
         border-left: 2px solid steelblue;
         border-bottom: 2px solid steelblue;
         background-color: transparent;
+        font-size: 16px;
       }
       .budget-list {
         text-align: left;
@@ -265,11 +277,12 @@ $main-section: rgb(215, 215, 215);
     background-color: $light-grey;
     .inputs {
       flex: 1;
-      padding: 0 15px;
+      padding: 0 20px;
       @include flex;
       justify-content: space-between;
       input {
-        font-size: 0.9rem;
+        width: 45%;
+        font-size: 16px;
         outline: none;
         border: none;
         text-align: left;
@@ -277,7 +290,7 @@ $main-section: rgb(215, 215, 215);
         background-color: transparent;
       }
       input::placeholder {
-        font-size: 0.8rem;
+        font-size: 16px;
       }
       input:nth-child(2) {
         text-align: right;

@@ -128,7 +128,7 @@ const AppHeader: React.FC<Props> = ({
               <>
                 <p className="menu-btn" onClick={() => setComposing(!composing)}>New Budget</p>
                 <div className="divider"></div>
-                <p className="menu-p">Active: {activeBudget.name}</p>
+                <p className="menu-active-text">Active: {activeBudget.name}</p>
               </>
             }
           </div>
