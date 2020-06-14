@@ -42,7 +42,7 @@ const ValueSheet: React.FC<Props> = ({
             </form>
           </div>
         }
-        {activeBudget.incomes.map((item, i) => (
+        {activeBudget.incomes.sort((a, b) => b.value - a.value).map((item, i) => (
           <div className="item" key={i}>
             <p className="item-name">{item.name}</p>
             {isDeleting
@@ -72,7 +72,7 @@ const ValueSheet: React.FC<Props> = ({
             </form>
           </div>
         }
-        {activeBudget.expenses.map((item, i) => (
+        {activeBudget.expenses.sort((a, b) => b.value - a.value).map((item, i) => (
           <div className="item" key={i}>
             <p className="item-name">{item.name}</p>
             {isDeleting
