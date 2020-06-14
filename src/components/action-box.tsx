@@ -1,9 +1,5 @@
 import React from 'react'
 
-import {
-  IsComposing
-} from '../interfaces/interfaces'
-
 interface Props {
   composeType: (type: string) => void
   isComposing: IsComposing
@@ -19,7 +15,8 @@ const ActionBox: React.FC<Props> = ({
   isDeleting,
   closeCompose,
   toggleDeletion,
-  deleteSelection }) => {
+  deleteSelection
+}) => {
 
   return (
     <div className="action-box">

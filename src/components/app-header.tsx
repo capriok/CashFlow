@@ -4,18 +4,6 @@ import short from 'short-uuid'
 
 import logout from '../images/logout.png'
 
-import {
-  User,
-  BudgetItem,
-  BudgetData
-} from '../interfaces/interfaces'
-import {
-  SetUser,
-  SetBudgets,
-  SetActiveBudget,
-  FormEvent
-} from '../types/types'
-
 import banner from '../images/head-banner.jpg'
 import card from '../images/head-cc.png'
 import deletePNG from '../images/delete.png'
@@ -37,13 +25,18 @@ const AppHeader: React.FC<Props> = ({
   activeBudget,
   setActiveBudget,
   setBudgets,
-  handlebudgetSelect }) => {
+  handlebudgetSelect
+}) => {
 
   const [menuOpen, setMenu] = useState<boolean>(false)
   const [composing, setComposing] = useState<boolean>(false)
   const [budgetName, setBudgetName] = useState<string>('')
+  const [budgetDeletion, setBudgetDeletion] = useState<BudgetDeletion>({
+    item: undefined,
+    state: false
+  })
 
-  const deleteBugdet = (index: number) => {
+  const deleteBugdet = (index: number | undefined) => {
     let newBudgets = budgets.filter((b, i) => {
       return i !== index
     })
@@ -86,6 +79,13 @@ const AppHeader: React.FC<Props> = ({
         }])
       setBudgetName('')
       setComposing(false)
+      if (budgets.length === 0) {
+        setActiveBudget({
+          name: budgetName,
+          incomes: [],
+          expenses: []
+        })
+      }
     }
   }
 
@@ -97,6 +97,14 @@ const AppHeader: React.FC<Props> = ({
         ? <div className="header-menu">
           <div className="budget-list">
             <h1>Choose Budget</h1>
+            {budgets.map((budget, i) => (
+              <div className="item">
+                <li onClick={() => handlebudgetSelect(i)}>{budget.name}</li>
+                <img src={deletePNG} alt=""
+                  onClick={() => setBudgetDeletion({ item: i, state: true })}
+                />
+              </div>
+            ))}
             {composing &&
               <form id="budgetForm" onSubmit={(e: FormEvent) => { handleForm(e) }}>
                 <input type="text" autoFocus
@@ -107,15 +115,6 @@ const AppHeader: React.FC<Props> = ({
                 />
               </form>
             }
-            {budgets.map((budget, i) => (
-              <div className="item">
-                <li onClick={() => handlebudgetSelect(i)}>{budget.name}</li>
-                <img src={deletePNG} alt=""
-                  onClick={() => {
-                    deleteBugdet(i)
-                  }} />
-              </div>
-            ))}
           </div>
           <div className="compose-btns-cont">
             {composing
@@ -124,14 +123,25 @@ const AppHeader: React.FC<Props> = ({
                 <div className="divider"></div>
                 <p className="menu-btn" onClick={() => setComposing(!composing)}>Cancel</p>
               </>
-              :
-              <>
-                <p className="menu-btn" onClick={() => setComposing(!composing)}>New Budget</p>
-                <div className="divider"></div>
-                <p className="menu-active-text">Active: {activeBudget.name}</p>
-              </>
+              : budgetDeletion.state
+                ? <>
+                  <p className="menu-btn" onClick={() => {
+                    deleteBugdet(budgetDeletion.item)
+                    setBudgetDeletion({ item: undefined, state: false })
+                  }}>Delete</p>
+                  <div className="divider"></div>
+                  <p className="menu-btn"
+                    onClick={() => setBudgetDeletion({ item: undefined, state: false }
+                    )}>Cancel</p>
+                </>
+                : <>
+                  <p className="menu-btn" onClick={() => setComposing(!composing)}>New Budget</p>
+                  <div className="divider"></div>
+                  <p className="menu-active-text">Active: {activeBudget.name}</p>
+                </>
             }
           </div>
+
         </div>
         : <>
           <img className="logout" src={logout} alt="" onClick={() => {

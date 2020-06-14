@@ -8,18 +8,6 @@ import SheetHead from './components/sheet-head'
 import DataSheet from './components/data-sheet'
 import ActionBox from './components/action-box'
 
-import {
-  User,
-  BudgetItem,
-  BudgetData,
-  SheetItem,
-  IsComposing,
-  NewItem,
-  Calculations,
-  Selection
-} from './interfaces/interfaces'
-import { FormEvent } from './types/types'
-
 export const App: React.FC = () => {
   const [user, setUser] = useState<User>({
     isAuth: false, name: ''
@@ -42,7 +30,7 @@ export const App: React.FC = () => {
     income: 0,
     expense: 0
   })
-  const [selection, setSelection] = useState<Selection>({
+  const [selection, setSelection] = useState<ItemSelection>({
     incomes: [],
     expenses: []
   })
@@ -78,6 +66,7 @@ export const App: React.FC = () => {
   }
 
   const toggleDeletion = (): void => {
+    setCompose({ income: false, expense: false })
     setDeleting(!isDeleting)
     setSelection({
       incomes: [],

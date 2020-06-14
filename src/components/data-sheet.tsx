@@ -1,18 +1,5 @@
 import React from 'react'
 
-import {
-  SheetItem,
-  IsComposing,
-  NewItem,
-  Calculations,
-  BudgetData
-} from '../interfaces/interfaces'
-import {
-  SetComposing,
-  SetNewItem,
-  FormEvent
-} from '../types/types'
-
 interface Props {
   activeBudget: BudgetData
   results: Calculations
@@ -50,7 +37,7 @@ const ValueSheet: React.FC<Props> = ({
               onSubmit={(e: FormEvent) => addType(e)}>
               <input type="text" placeholder="Name" value={newItem.name} autoFocus
                 onChange={e => setNewItem({ ...newItem, name: e.target.value })} />
-              <input type="text" placeholder="Value" value={newItem.value}
+              <input type="number" placeholder="Value" value={newItem.value}
                 onChange={e => setNewItem({ ...newItem, value: parseInt(e.target.value) })} />
             </form>
           </div>
